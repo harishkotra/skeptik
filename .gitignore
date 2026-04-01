@@ -33,3 +33,5 @@ backend/.env
 backend/skeptik.db
 coverage/
 htmlcov/
+
+docs/
