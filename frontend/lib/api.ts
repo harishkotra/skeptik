@@ -6,6 +6,10 @@ async function fetchJSON<T>(path: string): Promise<T> {
   const response = await fetch(`${API_URL}${path}`, { cache: "no-store" });
   if (!response.ok) {
     const body = await response.text();
+    const contentType = response.headers.get("content-type") ?? "";
+    if (contentType.includes("text/html")) {
+      throw new Error(`Backend returned ${response.status} ${response.statusText}. Check the backend host and logs.`);
+    }
     throw new Error(body || `API request failed for ${path}`);
   }
   return response.json() as Promise<T>;

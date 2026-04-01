@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, HTTPException
@@ -30,6 +31,7 @@ agent_factory = AgentFactory(settings)
 ingestion_service = IngestionService(tavily_client, brightdata_client)
 pipeline = NewsroomPipeline(settings, agent_factory, ingestion_service, tavily_client, monitor)
 autopilot = AutopilotService(settings, virlo_client, pipeline, repository, SessionLocal, monitor)
+manual_pipeline_task: asyncio.Task | None = None
 
 
 @asynccontextmanager
@@ -86,8 +88,24 @@ def get_article(slug: str, db: Session = Depends(get_db)):
 
 @app.post("/api/pipeline/run", response_model=PipelineRunResponse)
 async def run_pipeline():
-    article = await autopilot.run_once()
-    if not article:
-        errors = [value for value in monitor.snapshot().values() if value["status"] == "error"]
-        return PipelineRunResponse(status="error", reason="Pipeline run failed or produced no publishable article.", errors=errors)
-    return PipelineRunResponse(status="published", article=article, errors=[])
+    global manual_pipeline_task
+
+    if manual_pipeline_task and not manual_pipeline_task.done():
+        return PipelineRunResponse(
+            status="running",
+            reason="A pipeline run is already in progress.",
+            errors=[],
+        )
+
+    async def _run() -> None:
+        try:
+            await autopilot.run_once()
+        except Exception as exc:
+            monitor.set_error("backend", f"Manual pipeline run failed: {type(exc).__name__}", details=str(exc))
+
+    manual_pipeline_task = asyncio.create_task(_run())
+    return PipelineRunResponse(
+        status="accepted",
+        reason="Pipeline run started. Refresh /api/status or the homepage shortly.",
+        errors=[],
+    )
