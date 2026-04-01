@@ -6,6 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { getArticles, getStatus } from "@/lib/api";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function HomePage() {
   const [statusResult, articlesResult] = await Promise.allSettled([getStatus(), getArticles()]);
   const status = statusResult.status === "fulfilled" ? statusResult.value : null;
