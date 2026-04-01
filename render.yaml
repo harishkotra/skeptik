@@ -1,0 +1,57 @@
+services:
+  - type: web
+    name: skeptik-backend
+    runtime: docker
+    plan: free
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_NAME
+        value: Skeptik Newsroom API
+      - key: APP_URL
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: DATABASE_URL
+        value: sqlite:////tmp/skeptik.db
+      - key: FEATHERLESS_API_KEY
+        sync: false
+      - key: FEATHERLESS_BASE_URL
+        value: https://api.featherless.ai/v1
+      - key: FEATHERLESS_MODEL
+        value: moonshotai/Kimi-K2.5
+      - key: TAVILY_API_KEY
+        sync: false
+      - key: TAVILY_API_URL
+        value: https://api.tavily.com
+      - key: BRIGHTDATA_API_KEY
+        sync: false
+      - key: BRIGHTDATA_API_URL
+        value: https://api.brightdata.com/request
+      - key: BRIGHTDATA_ZONE
+        sync: false
+      - key: VIRLO_API_KEY
+        sync: false
+      - key: VIRLO_API_URL
+        value: https://api.virlo.ai/v1/trends/digest
+      - key: NEWSROOM_AUTOPILOT_ENABLED
+        value: "false"
+      - key: NEWSROOM_AUTOPILOT_SECONDS
+        value: "900"
+      - key: NEWSROOM_DEFAULT_REGION
+        value: global
+      - key: NEWSROOM_MIN_SOURCES
+        value: "3"
+      - key: NEWSROOM_MAX_FALSE_CLAIMS
+        value: "0"
+      - key: NEWSROOM_MAX_UNCERTAIN_RATIO
+        value: "0.34"
+      - key: NEWSROOM_MAX_SKEPTIC_SCORE
+        value: "0.62"
+      - key: NEWSROOM_TARGET_ARTICLE_COUNT
+        value: "8"
