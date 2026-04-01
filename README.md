@@ -13,6 +13,14 @@ It combines:
 - Next.js, Tailwind, and shadcn-style primitives for the frontend
 - SQLite today, with a clean path to Postgres
 
+
+### Screenshots
+
+<img width="1665" height="2296" alt="screencapture-localhost-3000-2026-04-01-18_40_12" src="https://github.com/user-attachments/assets/dfc04866-1657-4d64-afa2-b6c9ffd7cf4c" />
+<img width="1665" height="9855" alt="screencapture-localhost-3000-articles-how-new-semiconductor-restrictions-are-reshaping-cloud-ai-supply-chains-2026-04-01-18_40_49" src="https://github.com/user-attachments/assets/49b2fdc2-7812-4d99-a517-02aedf0ce29f" />
+<img width="1665" height="9153" alt="screencapture-localhost-3000-articles-why-battery-storage-economics-are-changing-utility-procurement-faster-than-public-policy-debates-2026-04-01-18_41_14" src="https://github.com/user-attachments/assets/7ac10a64-0fa7-41c0-87be-5badab4322ea" />
+
+
 ## Why This Exists
 
 Most AI news products are dressed-up summarizers. Skeptik is intentionally different:
@@ -261,7 +269,7 @@ Stories are rejected when:
 - skeptic pressure remains too high after revision
 - sources are insufficient
 
-That logic lives in [backend/app/services/newsroom.py](/Users/shk/experiments/skeptik/backend/app/services/newsroom.py).
+That logic lives in [backend/app/services/newsroom.py](backend/app/services/newsroom.py).
 
 ## Integration Diagnostics
 
@@ -286,19 +294,19 @@ This status is rendered on the homepage so judges can immediately tell whether t
 
 ## Key Files
 
-- API entrypoint: [backend/app/main.py](/Users/shk/experiments/skeptik/backend/app/main.py)
-- Agent configuration: [backend/app/services/agents.py](/Users/shk/experiments/skeptik/backend/app/services/agents.py)
-- Pipeline controller: [backend/app/services/newsroom.py](/Users/shk/experiments/skeptik/backend/app/services/newsroom.py)
-- Autopilot loop: [backend/app/services/autopilot.py](/Users/shk/experiments/skeptik/backend/app/services/autopilot.py)
-- Front page UI: [frontend/app/page.tsx](/Users/shk/experiments/skeptik/frontend/app/page.tsx)
-- Article page UI: [frontend/app/articles/[slug]/page.tsx](/Users/shk/experiments/skeptik/frontend/app/articles/[slug]/page.tsx)
+- API entrypoint: [backend/app/main.py](backend/app/main.py)
+- Agent configuration: [backend/app/services/agents.py](backend/app/services/agents.py)
+- Pipeline controller: [backend/app/services/newsroom.py](backend/app/services/newsroom.py)
+- Autopilot loop: [backend/app/services/autopilot.py](backend/app/services/autopilot.py)
+- Front page UI: [frontend/app/page.tsx](frontend/app/page.tsx)
+- Article page UI: [frontend/app/articles/[slug]/page.tsx](frontend/app/articles/[slug]/page.tsx)
 
 ## Local Development
 
 ### 1. Backend
 
 ```bash
-cd /Users/shk/experiments/skeptik/backend
+cd backend
 cp .env.example .env
 python3 -m venv .venv
 source .venv/bin/activate
@@ -309,7 +317,7 @@ uvicorn app.main:app --reload --port 8000
 ### 2. Frontend
 
 ```bash
-cd /Users/shk/experiments/skeptik/frontend
+cd frontend
 cp .env.local.example .env.local
 npm install
 npm run dev
@@ -320,12 +328,12 @@ Open [http://localhost:3000](http://localhost:3000).
 ### 3. Production Build Checks
 
 ```bash
-cd /Users/shk/experiments/skeptik/frontend
+cd frontend
 npm run build
 ```
 
 ```bash
-cd /Users/shk/experiments/skeptik/backend
+cd backend
 FEATHERLESS_API_KEY='' TAVILY_API_KEY='' BRIGHTDATA_API_KEY='' VIRLO_API_KEY='' ./.venv/bin/python -c "from fastapi.testclient import TestClient; from app.main import app; tc=TestClient(app); tc.__enter__(); print(tc.get('/api/status').json()); tc.__exit__(None, None, None)"
 ```
 
@@ -376,7 +384,7 @@ That gets you:
 
 ### Backend on Render
 
-This repo includes a Render blueprint at [render.yaml](/Users/shk/experiments/skeptik/render.yaml).
+This repo includes a Render blueprint at [render.yaml](render.yaml).
 
 #### Steps
 
@@ -509,12 +517,6 @@ The UI intentionally avoids generic AI-dashboard aesthetics. The front page lean
 - Bright Data extraction depends on the active zone type configured in your account and may need endpoint-specific request tuning
 - Real source freshness and dedupe scoring can be improved
 - The app now prefers explicit provider errors over silent fallbacks
-
-## Additional Docs
-
-- Technical blog: [docs/TECHNICAL_BLOG.md](/Users/shk/experiments/skeptik/docs/TECHNICAL_BLOG.md)
-- X thread: [docs/X_THREAD.md](/Users/shk/experiments/skeptik/docs/X_THREAD.md)
-- LinkedIn post: [docs/LINKEDIN_POST.md](/Users/shk/experiments/skeptik/docs/LINKEDIN_POST.md)
 
 ## Credits
 
